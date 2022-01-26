@@ -10,20 +10,20 @@ module.exports = {
              tickets: "./assets/js/tickets.js"
             },
                    output: {
-                       path: __dirname + '/dist',
+                       path: `${__dirname}/dist`,
                        filename: '[name].bundle.js'
                    },
                    module: {
                      rules: [
                        {
-                         test: /\.jpg$/i,
+                         test:/\.(png|jpe?g|gif)$/i,
                          use: [
                            {
                              loader: 'file-loader',
                              options: {
                                esModule: false,
-                               name (file) {
-                                 return "[path][name].[ext]"
+                               name(file) {
+                                 return "[path][name].[ext]";
                                },
                                publicPath(url) {
                                  return url.replace("../", "/assets/")
