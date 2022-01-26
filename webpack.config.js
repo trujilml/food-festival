@@ -2,12 +2,41 @@ const path = require("path");
 const webpack = require("webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-module.exports = { entry: './assets/js/script.js', 
+module.exports = {    
+          entry: {
+             app: "./assets/js/script.js",
+             events: "./assets/js/events.js",
+             schedule: "./assets/js/schedule.js",
+             tickets: "./assets/js/tickets.js"
+            },
                    output: {
                        path: __dirname + '/dist',
                        filename: '[name].bundle.js'
                    },
-                   mode: 'development',
+                   module: {
+                     rules: [
+                       {
+                         test: /\.jpg$/i,
+                         use: [
+                           {
+                             loader: 'file-loader',
+                             options: {
+                               esModule: false,
+                               name (file) {
+                                 return "[path][name].[ext]"
+                               },
+                               publicPath(url) {
+                                 return url.replace("../", "/assets/")
+                               }
+                             }
+                           },
+                           {
+                             loader: 'image-webpack-loader'
+                           }
+                         ]
+                       }
+                     ]
+                   },
                    plugins: [
                      new webpack.ProvidePlugin({
                        $: "jquery",
@@ -15,12 +44,9 @@ module.exports = { entry: './assets/js/script.js',
                      }),
                      new BundleAnalyzerPlugin({
                        analyzerMode: "static", //report outputs to a html file in the dist folder
-                     })
-                   ],
-                   entry: {
-                     app: "./assets/js/script.js",
-                     events: "./assets/js/events.js",
-                     schedule: "./assets/js/schedule.js",
-                     tickets: "./assets/js/tickets.js"
-                   }
-                 };
+                     }),
+                    ],
+                     mode: 'development',
+                    };
+
+// module.exports = config;
